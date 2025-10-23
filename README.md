@@ -2,6 +2,21 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+
+NEED TO INSTALL:
+npm i @emailjs/browser
+npm i @fortawesome/free-brands-svg-icons
+npm i @fortawesome/free-solid-svg-icons
+npm i @fortawesome/react-fontawesome
+npm i animate.css
+npm i gsap-trial
+npm i loaders.css
+npm i react-leaflet
+npm react-loaders
+npm i react-router-dom
+npm i sass
+npm i firebase
+
 ## Available Scripts
 
 In the project directory, you can run:
