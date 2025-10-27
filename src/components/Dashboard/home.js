@@ -1,74 +1,60 @@
-import { useRef } from 'react';
-import { auth, storage, db } from '../../firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { addDoc } from 'firebase/firestore';
-import { collection } from 'firebase/firestore/lite';
-
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-    const form = useRef();
+  const [data, setData] = useState(null);
+  const [err, setErr] = useState('');
+  const navigate = useNavigate();
 
-    const submitPortfolio = (e) => {
-        e.preventDefault();
-        const name = form.current[0]?.value;
-        const description = form.current[1]?.value;
-        const url = form.current[2]?.value;
-        const image = form.current[3]?.files[0];
+  useEffect(() => {
+    const load = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return navigate('/login');
 
-        const storageRef = ref(storage, `portfolio/${image.name}`);
-
-        uploadBytes(storageRef, image).then(
-            (snapshot) => {
-                getDownloadURL(snapshot.ref).then((downloadUrl) => {
-                    savePortfolio({
-                        name,
-                        description,
-                        url,
-                        image: downloadUrl
-                    })
-                }, (error) => {
-                    console.log(error);
-                    savePortfolio({
-                        name,
-                        description,
-                        url,
-                        image: null
-                    })
-                })
-            }, (error) => {
-                console.log(error);
-                savePortfolio({
-                    name,
-                    description,
-                    url,
-                    image: null
-                })
-            }
-        )
-    }
-
-    const savePortfolio = async (portfolio) => {
-        try {
-            await addDoc(collection(db, 'portfolio'), portfolio);
-            window.location.reload(false);
-        } catch (error) {
-            alert('Failed to add portfolio');
+      try {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/projects/dashboard`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const json = await res.json();
+        if (res.ok && json.success) {
+          setData(json);
+        } else {
+          setErr(json.message || 'Failed to load dashboard');
+          if (res.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            navigate('/login');
+          }
         }
-    }
+      } catch (e) {
+        setErr('Network error');
+      }
+    };
+    load();
+  }, [navigate]);
 
-    return (
-        <div className="dashboard">
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
+  };
 
-            <form ref={form} onSubmit={submitPortfolio}>
-                <p><input type="text" placeholder="Name" /></p>
-                <p><textarea placeholder="Description" /></p>
-                <p><input type="text" placeholder="Url" /></p>
-                <p><input type="file" placeholder="Image" /></p>
-                <button type="submit">Submit</button>
-                <button onClick={() => auth.signOut()}>Sign out</button>
-            </form>
-        </div>
-    )
-}
+  if (err) return <div>{err}</div>;
+  if (!data) return <div>Loading...</div>;
+
+  return (
+    <div>
+      <h2>{data.message}</h2>
+      {data.user && (
+        <ul>
+          <li>Name: {data.user.name}</li>
+          <li>Email: {data.user.email}</li>
+          <li>Role: {data.user.role}</li>
+        </ul>
+      )}
+      <button onClick={logout}>Logout</button>
+    </div>
+  );
+};
 
 export default Home;

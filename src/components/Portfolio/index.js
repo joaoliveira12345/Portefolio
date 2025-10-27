@@ -1,70 +1,50 @@
 import React, { useEffect, useState } from "react";
-import Loader from "react-loaders";
-import AnimatedLetters from "../AnimatedLetters";
 import "./index.scss";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase";
 
 const Portfolio = () => {
-  const [items, setItems] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [err, setErr] = useState("");
 
   useEffect(() => {
-    if (!db) return; // guard if firebase not initialized
-
-    const fetch = async () => {
+    const load = async () => {
       try {
-        const colRef = collection(db, "projects"); // <-- db first, then collection name
-        const snap = await getDocs(colRef);
-        setItems(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
-      } catch (err) {
-        console.error("Firestore fetch error:", err);
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
+        const json = await res.json();
+        if (res.ok && json.success) setProjects(json.projects);
+        else setErr(json.message || "Failed to load projects");
+      } catch (e) {
+        setErr("Network error");
       }
     };
-
-    fetch();
+    load();
   }, []);
 
-  const renderPortfolio = (items) => {
-    return (
-      <div className="images-container">
-        {
-          items.map((item, idx) => {
-            return (
-              <div className="image-box" key={idx}>
-                <img
-                  src={item.image}
-                  className="portfolio-image"
-                  alt="portfolio" />
-                <div className="content">
-                  <p className="title">{item.name}</p>
-                  <h4 className="description">{item.description}</h4>
-                  <button
-                    className="btn"
-                    onClick={() => window.open(item.url)}
-                  >View</button>
-                </div>
-              </div>
-            )
-          })
-        }
-      </div>
-    );
-  };
+  if (err) return <div className="container portfolio-page">{err}</div>;
 
   return (
-    <>
-      <div className="container portfolio-page">
-        <h1 className="page-title">
-          <AnimatedLetters
-            letterClass="text-animate"
-            strArray={"Portfolio".split("")}
-            idx={15}
-          />
-        </h1>
-        <div>{renderPortfolio(items)}</div>
+    <div className="container portfolio-page">
+      <h1 className="page-title">Portfolio</h1>
+      <div className="images-container">
+        {projects.map((p) => (
+          <div className="image-box" key={p.id}>
+            <img
+              className="portfolio-image"
+              src={p.cover || p.image}
+              alt={p.title || p.name}
+            />
+            <div className="content">
+              <p className="title">{p.title || p.name}</p>
+              <h4 className="description">{p.description}</h4>
+              {(p.url || p.link) && (
+                <button className="btn" onClick={() => window.open(p.url || p.link, "_blank")}>
+                  View
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
-      <Loader type="pacman" />
-    </>
+    </div>
   );
 };
 
