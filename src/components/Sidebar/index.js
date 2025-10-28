@@ -15,10 +15,17 @@ import {
   faBars,
   faClose,
 } from '@fortawesome/free-solid-svg-icons'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 
 const Sidebar = () => {
   const [showNav, setShowNav] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
+  };
 
   return (
     <div className="nav-bar">
@@ -101,6 +108,25 @@ const Sidebar = () => {
           color="#ffd700"
           size="3x"
           className='hamburger-icon' />
+      <button 
+        onClick={handleLogout}
+        style={{
+          position: 'absolute',
+          bottom: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: '#ff6b6b',
+          color: '#fff',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          fontSize: '14px',
+          fontWeight: 'bold'
+        }}
+      >
+        Logout
+      </button>
     </div>
   )
 }

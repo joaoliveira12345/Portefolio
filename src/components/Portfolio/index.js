@@ -24,7 +24,7 @@ const Portfolio = () => {
         const data = await response.json();
 
         if (response.ok && data.success) {
-          setPortfolio(data.projects);
+          setPortfolio(data.projects || []);
         } else {
           setError(data.message || 'Failed to load projects');
         }
@@ -39,30 +39,32 @@ const Portfolio = () => {
     fetchProjects();
   }, []);
 
-  const renderPortfolio = (portfolio) => {
+  const renderPortfolio = (portfolioData) => {
+    if (!Array.isArray(portfolioData) || portfolioData.length === 0) {
+      return <p>No projects available</p>;
+    }
+
     return (
       <div className="images-container">
-        {portfolio.map((port, idx) => {
-          return (
-            <div className="image-box" key={idx}>
-              <img
-                src={port.cover || port.image}
-                className="portfolio-image"
-                alt={port.title || port.name || 'portfolio'}
-              />
-              <div className="content">
-                <p className="title">{port.title || port.name}</p>
-                <h4 className="description">{port.description}</h4>
-                <button
-                  className="btn"
-                  onClick={() => window.open(port.url || port.link)}
-                >
-                  View
-                </button>
-              </div>
+        {portfolioData.map((port, idx) => (
+          <div className="image-box" key={port.id || idx}>
+            <img
+              src={port.cover || port.image}
+              className="portfolio-image"
+              alt={port.title || port.name || 'portfolio'}
+            />
+            <div className="content">
+              <p className="title">{port.title || port.name}</p>
+              <h4 className="description">{port.description}</h4>
+              <button
+                className="btn"
+                onClick={() => window.open(port.url || port.link)}
+              >
+                View
+              </button>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     );
   };
