@@ -1,55 +1,25 @@
-const bcrypt = require('bcryptjs');
-
-// In-memory user storage (replace with DB in production)
-const users = [];
-
-/**
- * Seed a default admin user
- */
-async function seedAdmin() {
-  if (users.find(u => u.email === 'admin@local')) {
-    console.log('Admin user already exists');
-    return;
-  }
-  
-  const hash = await bcrypt.hash('admin123', 10);
-  users.push({
+const users = [
+  {
     id: 1,
     name: 'Admin User',
     email: 'admin@local',
-    password: hash,
+    password: 'admin123',
     role: 'admin'
-  });
-  console.log('✅ Admin user seeded: admin@local / admin123');
-}
+  },
+  {
+    id: 2,
+    name: 'Visitor User',
+    email: 'visitor@local',
+    password: 'visitor123',
+    role: 'visitor'
+  }
+];
 
-/**
- * Find user by email
- */
-function findByEmail(email) {
-  return users.find(u => u.email === email);
-}
-
-/**
- * Add new user
- */
-function addUser(user) {
-  user.id = users.length + 1;
-  users.push(user);
-  return user;
-}
-
-/**
- * Get all users (for debugging)
- */
-function getAllUsers() {
-  return users.map(u => ({ id: u.id, name: u.name, email: u.email, role: u.role }));
-}
-
-module.exports = { 
-  users, 
-  findByEmail, 
-  addUser, 
-  seedAdmin,
-  getAllUsers
+// Function to seed admin (optional, for compatibility)
+const seedAdmin = () => {
+  console.log('✅ Users initialized:');
+  console.log('   Admin: admin@local / admin123');
+  console.log('   Visitor: visitor@local / visitor123');
 };
+
+module.exports = { users, seedAdmin };

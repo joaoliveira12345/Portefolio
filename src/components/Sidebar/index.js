@@ -1,5 +1,5 @@
 import './index.scss'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import LogoS from '../../assets/images/logo-s.png'
 import LogoSubtitle from '../../assets/images/logo_sub.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -14,12 +14,28 @@ import {
   faSuitcase,
   faBars,
   faClose,
+  faRightFromBracket,
+  faGauge,
 } from '@fortawesome/free-solid-svg-icons'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 
 const Sidebar = () => {
   const [showNav, setShowNav] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is admin
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr);
+        setIsAdmin(user.role === 'admin');
+      } catch (e) {
+        setIsAdmin(false);
+      }
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -29,33 +45,38 @@ const Sidebar = () => {
 
   return (
     <div className="nav-bar">
-      <Link 
-        className="logo"
-        to="/"
-        onClick={() => setShowNav(false)}>
+      <Link className="logo" to="/">
         <img src={LogoS} alt="Logo" />
         <img className="sub-logo" src={LogoSubtitle} alt="slobodan" />
       </Link>
+
+      {/* Logout button right below logo */}
+      <button 
+        onClick={handleLogout}
+        className="logout-btn"
+        title="Logout"
+      >
+        <FontAwesomeIcon icon={faRightFromBracket} color="#4d4d4e" />
+      </button>
+
       <nav className={showNav ? 'mobile-show' : ''}>
         <NavLink 
-          exact="true"
           activeclassname="active"
-          to="/"
-          onClick={() => setShowNav(false)}>
+          to="/home"
+        >
           <FontAwesomeIcon icon={faHome} color="#4d4d4e" />
         </NavLink>
         <NavLink 
           activeclassname="active"
           className="about-link"
           to="/about"
-          onClick={() => setShowNav(false)}>
+        >
           <FontAwesomeIcon icon={faUser} color="#4d4d4e" />
         </NavLink>
         <NavLink
           activeclassname="active"
           className="portfolio-link"
           to="/portfolio"
-          onClick={() => setShowNav(false)}
         >
           <FontAwesomeIcon icon={faSuitcase} color="#4d4d4e" />
         </NavLink>
@@ -63,10 +84,21 @@ const Sidebar = () => {
           activeclassname="active"
           className="contact-link"
           to="/contact"
-          onClick={() => setShowNav(false)}
         >
           <FontAwesomeIcon icon={faEnvelope} color="#4d4d4e" />
         </NavLink>
+        
+        {/* Only show dashboard link if user is admin */}
+        {isAdmin && (
+          <NavLink
+            activeclassname="active"
+            className="dashboard-link"
+            to="/dashboard"
+          >
+            <FontAwesomeIcon icon={faGauge} color="#4d4d4e" />
+          </NavLink>
+        )}
+        
         <FontAwesomeIcon 
           onClick={() => setShowNav(false)}
           icon={faClose}
@@ -74,6 +106,7 @@ const Sidebar = () => {
           size="3x"
           className='close-icon' />
       </nav>
+      
       <ul>
         <li>
           <a
@@ -102,31 +135,13 @@ const Sidebar = () => {
           </a>
         </li>
       </ul>
+      
       <FontAwesomeIcon 
           onClick={() => setShowNav(true)}
           icon={faBars}
           color="#ffd700"
           size="3x"
           className='hamburger-icon' />
-      <button 
-        onClick={handleLogout}
-        style={{
-          position: 'absolute',
-          bottom: '20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          background: '#ff6b6b',
-          color: '#fff',
-          border: 'none',
-          padding: '10px 20px',
-          borderRadius: '4px',
-          cursor: 'pointer',
-          fontSize: '14px',
-          fontWeight: 'bold'
-        }}
-      >
-        Logout
-      </button>
     </div>
   )
 }

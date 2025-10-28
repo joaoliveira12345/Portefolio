@@ -1,34 +1,29 @@
-{
-    "portfolio": [
-        {
-            "cover": "/portfolio/1/one.png",
-            "title": "GGWP",
-            "description": "React, JSX, Tailwind, Jest",
-            "url": "http://google.com"
-        },
-        {
-            "cover": "/portfolio/1/one.png",
-            "title": "GGWP",
-            "description": "React, JSX, Tailwind, Jest",
-            "url": "http://google.com"
-        },
-        {
-            "cover": "/portfolio/1/one.png",
-            "title": "GGWP",
-            "description": "React, JSX, Tailwind, Jest",
-            "url": "http://google.com"
-        },
-        {
-            "cover": "/portfolio/1/one.png",
-            "title": "GGWP",
-            "description": "React, JSX, Tailwind, Jest",
-            "url": "http://google.com"
-        },
-        {
-            "cover": "/portfolio/1/one.png",
-            "title": "GGWP",
-            "description": "React, JSX, Tailwind, Jest",
-            "url": "http://google.com"
-        }
-    ]
-}
+[
+  {
+    "id": 1,
+    "title": "Portfolio Website",
+    "description": "My personal portfolio built with React",
+    "image": "https://i.imgur.com/example1.jpg",
+    "url": "https://github.com/your-username/portfolio",
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "createdBy": "Admin User"
+  },
+  {
+    "id": 2,
+    "title": "E-commerce App",
+    "description": "Full-stack e-commerce application",
+    "image": "https://i.imgur.com/example2.jpg",
+    "url": "https://github.com/your-username/ecommerce",
+    "createdAt": "2025-01-02T00:00:00.000Z",
+    "createdBy": "Admin User"
+  },
+  {
+    "id": 3,
+    "title": "Weather App",
+    "description": "Real-time weather application using OpenWeather API",
+    "image": "https://i.imgur.com/example3.jpg",
+    "url": "https://github.com/your-username/weather-app",
+    "createdAt": "2025-01-03T00:00:00.000Z",
+    "createdBy": "Admin User"
+  }
+]

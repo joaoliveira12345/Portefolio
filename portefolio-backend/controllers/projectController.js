@@ -82,4 +82,40 @@ router.get('/dashboard', auth, (req, res) => {
   });
 });
 
+/**
+ * DELETE /projects/:id
+ * Delete project (admin only)
+ */
+router.delete('/:id', auth, requireRole('admin'), (req, res) => {
+  try {
+    const raw = fs.readFileSync(dataPath, 'utf8');
+    let projects = JSON.parse(raw || '[]');
+    
+    const projectId = parseInt(req.params.id);
+    const initialLength = projects.length;
+    
+    projects = projects.filter(p => p.id !== projectId);
+    
+    if (projects.length === initialLength) {
+      return res.status(404).json({ 
+        success: false,
+        message: 'Project not found' 
+      });
+    }
+    
+    fs.writeFileSync(dataPath, JSON.stringify(projects, null, 2));
+    
+    res.json({ 
+      success: true,
+      message: 'Project deleted successfully' 
+    });
+  } catch (error) {
+    console.error('Error deleting project:', error);
+    res.status(500).json({ 
+      success: false,
+      message: 'Error deleting project' 
+    });
+  }
+});
+
 module.exports = router;

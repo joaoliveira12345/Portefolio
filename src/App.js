@@ -10,31 +10,35 @@ import Login from './components/Login';
 import ProtectedRoute from './utils/ProtectedRoute';
 
 function App() {
-  // Check if user is logged in
-  const isAuthenticated = !!localStorage.getItem('token');
-
   return (
     <Routes>
-      {/* Redirect root to login if not authenticated */}
-      <Route 
-        path="/" 
-        element={isAuthenticated ? <Navigate to="/portfolio" replace /> : <Navigate to="/login" replace />} 
-      />
-      
-      {/* Login route (public) */}
+      {/* Always start at Login */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
+
+      {/* Public */}
       <Route path="/login" element={<Login />} />
-      
-      {/* Protected routes with Layout */}
-      <Route path="/" element={
-        <ProtectedRoute>
-          <Layout />
-        </ProtectedRoute>
-      }>
+
+      {/* Protected area */}
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
         <Route path="home" element={<Home />} />
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />
         <Route path="portfolio" element={<Portfolio />} />
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route
+          path="dashboard"
+          element={
+            <ProtectedRoute adminOnly={true}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
       </Route>
     </Routes>
   );

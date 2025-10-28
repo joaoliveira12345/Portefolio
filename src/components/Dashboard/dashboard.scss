@@ -1,0 +1,232 @@
+.dashboard-container {
+  padding: 50px 50px 50px 150px; // Added 150px left padding
+  min-height: 100vh;
+  background: #022c43;
+  color: #fff;
+  margin-left: 80px; // Push away from sidebar
+
+  .error-msg {
+    color: #ff6b6b;
+    text-align: center;
+    font-size: 18px;
+  }
+}
+
+.dashboard-header {
+  margin-bottom: 40px;
+
+  h1 {
+    color: #ffd700;
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+
+  .user-info {
+    background: rgba(255, 215, 0, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #ffd700;
+    max-width: 500px;
+
+    p {
+      margin: 5px 0;
+      font-size: 16px;
+
+      strong {
+        color: #ffd700;
+      }
+    }
+  }
+}
+
+.dashboard-actions {
+  margin-bottom: 30px;
+
+  .btn-add {
+    background: #ffd700;
+    color: #000;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      background: #ffed4e;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.project-form {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  border-radius: 8px;
+  margin-bottom: 40px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  max-width: 800px; // Limit form width
+
+  h2 {
+    color: #ffd700;
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+
+    label {
+      display: block;
+      color: #ffd700;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 4px;
+      color: #fff;
+      font-size: 14px;
+
+      &:focus {
+        outline: none;
+        border-color: #ffd700;
+      }
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+    }
+
+    textarea {
+      resize: vertical;
+      font-family: inherit;
+    }
+  }
+
+  .btn-submit {
+    background: #ffd700;
+    color: #000;
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      background: #ffed4e;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.projects-list {
+  h2 {
+    color: #ffd700;
+    margin-bottom: 20px;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+
+    .project-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      transition: all 0.3s;
+
+      &:hover {
+        transform: translateY(-5px);
+        border-color: #ffd700;
+      }
+
+      img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+
+      .project-info {
+        padding: 20px;
+
+        h3 {
+          color: #ffd700;
+          margin-bottom: 10px;
+          font-size: 20px;
+        }
+
+        p {
+          color: rgba(255, 255, 255, 0.8);
+          font-size: 14px;
+          margin-bottom: 15px;
+          line-height: 1.5;
+        }
+
+        .project-actions {
+          display: flex;
+          gap: 10px;
+
+          .btn-view,
+          .btn-delete {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+          }
+
+          .btn-view {
+            background: #ffd700;
+            color: #000;
+
+            &:hover {
+              background: #ffed4e;
+            }
+          }
+
+          .btn-delete {
+            background: #ff6b6b;
+            color: #fff;
+
+            &:hover {
+              background: #ff5252;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive
+@media screen and (max-width: 1200px) {
+  .dashboard-container {
+    margin-left: 60px;
+    padding-left: 40px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .dashboard-container {
+    margin-left: 0;
+    padding: 30px 20px;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
