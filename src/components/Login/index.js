@@ -36,25 +36,35 @@ const Login = () => {
   };
 
   return (
-    <div className="login">
+    <div style={{ padding: '50px', maxWidth: '400px', margin: '0 auto' }}>
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="admin@local"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="admin123"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <div style={{ marginBottom: '15px' }}>
+          <input
+            type="email"
+            placeholder="admin@local"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            style={{ width: '100%', padding: '10px', fontSize: '16px' }}
+          />
+        </div>
+        <div style={{ marginBottom: '15px' }}>
+          <input
+            type="password"
+            placeholder="admin123"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            style={{ width: '100%', padding: '10px', fontSize: '16px' }}
+          />
+        </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit" disabled={loading}>
+        <button
+          type="submit"
+          disabled={loading}
+          style={{ width: '100%', padding: '10px', fontSize: '16px' }}
+        >
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>

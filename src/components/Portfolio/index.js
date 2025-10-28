@@ -1,50 +1,116 @@
-import React, { useEffect, useState } from "react";
-import "./index.scss";
+import React, { useEffect, useState } from 'react';
+import Loader from 'react-loaders';
+import AnimatedLetters from '../AnimatedLetters';
+import './index.scss';
 
 const Portfolio = () => {
-  const [projects, setProjects] = useState([]);
-  const [err, setErr] = useState("");
+  const [letterClass, setLetterClass] = useState('text-animate');
+  const [portfolio, setPortfolio] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
-        const json = await res.json();
-        if (res.ok && json.success) setProjects(json.projects);
-        else setErr(json.message || "Failed to load projects");
-      } catch (e) {
-        setErr("Network error");
-      }
-    };
-    load();
+    const timer = setTimeout(() => {
+      setLetterClass('text-animate-hover');
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, []);
 
-  if (err) return <div className="container portfolio-page">{err}</div>;
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/projects`);
+        const data = await response.json();
 
-  return (
-    <div className="container portfolio-page">
-      <h1 className="page-title">Portfolio</h1>
+        if (response.ok && data.success) {
+          setPortfolio(data.projects);
+        } else {
+          setError(data.message || 'Failed to load projects');
+        }
+      } catch (err) {
+        console.error('Portfolio error:', err);
+        setError('Network error. Please check if backend is running.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  const renderPortfolio = (portfolio) => {
+    return (
       <div className="images-container">
-        {projects.map((p) => (
-          <div className="image-box" key={p.id}>
-            <img
-              className="portfolio-image"
-              src={p.cover || p.image}
-              alt={p.title || p.name}
-            />
-            <div className="content">
-              <p className="title">{p.title || p.name}</p>
-              <h4 className="description">{p.description}</h4>
-              {(p.url || p.link) && (
-                <button className="btn" onClick={() => window.open(p.url || p.link, "_blank")}>
+        {portfolio.map((port, idx) => {
+          return (
+            <div className="image-box" key={idx}>
+              <img
+                src={port.cover || port.image}
+                className="portfolio-image"
+                alt={port.title || port.name || 'portfolio'}
+              />
+              <div className="content">
+                <p className="title">{port.title || port.name}</p>
+                <h4 className="description">{port.description}</h4>
+                <button
+                  className="btn"
+                  onClick={() => window.open(port.url || port.link)}
+                >
                   View
                 </button>
-              )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
-    </div>
+    );
+  };
+
+  if (loading) {
+    return (
+      <div className="container portfolio-page">
+        <h1 className="page-title">
+          <AnimatedLetters
+            letterClass={letterClass}
+            strArray={'Loading...'.split('')}
+            idx={15}
+          />
+        </h1>
+        <Loader type="pacman" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container portfolio-page">
+        <h1 className="page-title">
+          <AnimatedLetters
+            letterClass={letterClass}
+            strArray={'Error'.split('')}
+            idx={15}
+          />
+        </h1>
+        <div className="error-message">{error}</div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className="container portfolio-page">
+        <h1 className="page-title">
+          <AnimatedLetters
+            letterClass={letterClass}
+            strArray={'Portfolio'.split('')}
+            idx={15}
+          />
+        </h1>
+        <div>{renderPortfolio(portfolio)}</div>
+      </div>
+      <Loader type="pacman" />
+    </>
   );
 };
 

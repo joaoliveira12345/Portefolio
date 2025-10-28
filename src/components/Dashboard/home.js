@@ -39,11 +39,11 @@ const Home = () => {
     navigate('/login');
   };
 
-  if (err) return <div>{err}</div>;
-  if (!data) return <div>Loading...</div>;
+  if (err) return <div style={{ padding: '50px' }}>{err}</div>;
+  if (!data) return <div style={{ padding: '50px' }}>Loading...</div>;
 
   return (
-    <div>
+    <div style={{ padding: '50px' }}>
       <h2>{data.message}</h2>
       {data.user && (
         <ul>
