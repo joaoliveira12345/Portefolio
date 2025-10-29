@@ -1,5 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const { users } = require('../models/userModel');
 const auth = require('../middleware/authMiddleware');
 
@@ -8,9 +9,9 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-producti
 
 /**
  * POST /auth/login
- * Login route
+ * Login route with bcrypt password verification
  */
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -31,8 +32,10 @@ router.post('/login', (req, res) => {
       });
     }
 
-    // Check password (in production, use bcrypt)
-    if (user.password !== password) {
+    // Compare password with hashed password
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) {
       return res.status(401).json({
         success: false,
         message: 'Invalid credentials'

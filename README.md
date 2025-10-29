@@ -1,85 +1,276 @@
-# Getting Started with Create React App
+# Full-Stack Portfolio with Authentication
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern portfolio website with admin dashboard, built with React (frontend) and Node.js/Express (backend).
 
+## 🚀 Features
 
-NEED TO INSTALL:
-npm i @emailjs/browser
-npm i @fortawesome/free-brands-svg-icons
-npm i @fortawesome/free-solid-svg-icons
-npm i @fortawesome/react-fontawesome
-npm i animate.css
-npm i gsap-trial
-npm i loaders.css
-npm i react-leaflet
-npm react-loaders
-npm i react-router-dom
-npm i sass
-npm i firebase
+- 🔐 JWT-based authentication (Admin & Visitor roles)
+- 📊 Admin dashboard to manage projects
+- 🎨 Animated UI with smooth transitions
+- 📱 Responsive design
+- 🔒 Role-based access control
+- 📧 Contact form with EmailJS
+- 🔑 Secure password hashing with bcrypt
 
-## Available Scripts
+## 🛠️ Tech Stack
 
-In the project directory, you can run:
+**Frontend:**
+- React 18
+- React Router DOM
+- SCSS
+- FontAwesome Icons
+- Animate.css
+- EmailJS
 
-### `npm start`
+**Backend:**
+- Node.js & Express
+- JWT (jsonwebtoken)
+- bcrypt for password hashing
+- CORS enabled
+- File-based JSON storage
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 📁 Project Structure
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```
+Portefolio/
+├── src/                          # Frontend React app
+│   ├── components/
+│   │   ├── Home/                # Landing page with animations
+│   │   ├── About/               # About section
+│   │   ├── Portfolio/           # Projects display
+│   │   ├── Contact/             # Contact form
+│   │   ├── Dashboard/           # Admin panel (protected)
+│   │   ├── Login/               # Authentication page
+│   │   └── Sidebar/             # Navigation menu
+│   ├── utils/
+│   │   └── ProtectedRoute.js    # Route protection HOC
+│   └── App.js                   # Main app with routes
+│
+├── portefolio-backend/           # Backend API
+│   ├── controllers/
+│   │   ├── authController.js    # Login & authentication
+│   │   └── projectController.js # CRUD for projects
+│   ├── middleware/
+│   │   ├── authMiddleware.js    # JWT verification
+│   │   └── roleMiddleware.js    # Role-based access
+│   ├── models/
+│   │   └── userModel.js         # User data (hashed passwords)
+│   ├── data/
+│   │   └── projects.json        # Projects database (JSON)
+│   └── server.js                # Express server
+│
+└── public/                       # Static assets
+```
 
-### `npm test`
+## ⚙️ Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Prerequisites
+- Node.js v14 or higher
+- npm or yarn
 
-### `npm run build`
+### 1. Backend Setup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+# Navigate to backend folder
+cd portefolio-backend
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Install dependencies
+npm install
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Start server
+npm start
 
-### `npm run eject`
+# Server runs on http://localhost:5000
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 2. Frontend Setup
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+# From root folder
+npm install
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Start React app
+npm start
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+# App runs on http://localhost:3000
+```
 
-## Learn More
+## 🔐 Environment Variables
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Backend `.env` File
+Create `portefolio-backend/.env`:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```env
+PORT=5000
+JWT_SECRET=super-secret-jwt-key-change-this-in-production-12345
+NODE_ENV=development
+```
 
-### Code Splitting
+### Frontend `.env` File
+Create `.env` in root folder:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```env
+REACT_APP_API_URL=http://localhost:5000
+```
 
-### Analyzing the Bundle Size
+## 👤 User Credentials
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Admin Account
+- **Email:** `admin@local`
+- **Password:** `admin123`
+- **Access:** Full dashboard + CRUD operations on projects
 
-### Making a Progressive Web App
+### Visitor Account
+- **Email:** `visitor@local`
+- **Password:** `visitor123`
+- **Access:** View portfolio only (no dashboard access)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 📡 API Endpoints
 
-### Advanced Configuration
+### Authentication
+- `POST /auth/login` - User login (returns JWT token)
+- `GET /auth/me` - Get current user info (protected)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Projects
+- `GET /projects` - Get all projects (public)
+- `POST /projects` - Create new project (admin only)
+- `DELETE /projects/:id` - Delete project (admin only)
+- `GET /projects/dashboard` - Get dashboard stats (protected)
 
-### Deployment
+## ✅ Features Checklist
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- [x] JWT-based authentication with token expiration
+- [x] Role-based authorization (admin/visitor)
+- [x] Password hashing with bcrypt (10 rounds)
+- [x] Protected routes (frontend & backend)
+- [x] RESTful API design
+- [x] Dynamic project management
+- [x] Responsive UI with animations
+- [x] Clear modular code structure
+- [x] CORS configuration
+- [x] Environment variables for secrets
 
-### `npm run build` fails to minify
+## 🔒 Security Features
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **JWT Tokens:** Expire after 24 hours
+- **bcrypt:** Password hashing with 10 salt rounds
+- **Middleware Protection:** All sensitive routes protected
+- **Role-Based Access Control:** Admin-only endpoints
+- **CORS Configuration:** Controlled cross-origin requests
+- **Environment Variables:** Secrets stored securely
+
+## 🚀 Usage
+
+### Adding a New Project (Admin)
+
+1. Login with admin credentials
+2. Navigate to Dashboard (`/dashboard`)
+3. Click **"+ Add New Project"**
+4. Fill in:
+   - **Title:** Project name
+   - **Description:** Brief description
+   - **Image URL:** Screenshot URL (use imgur.com)
+   - **Project URL:** GitHub repo or live demo
+5. Click **"Add Project"**
+6. Project appears in Portfolio section
+
+### Viewing Portfolio (Visitor)
+
+1. Login with visitor credentials
+2. Navigate through Home, About, Portfolio, Contact
+3. Dashboard is hidden (admin-only)
+
+## 📦 Deployment
+
+### Frontend (Vercel/Netlify)
+1. Build production version: `npm run build`
+2. Deploy `build/` folder
+3. Update `REACT_APP_API_URL` to production backend URL
+
+### Backend (Heroku/Railway)
+1. Set environment variables in hosting platform
+2. Use strong `JWT_SECRET` in production
+3. Replace JSON file storage with MongoDB/PostgreSQL
+4. Enable HTTPS
+
+## 🔄 Future Improvements
+
+- [ ] Replace JSON storage with MongoDB
+- [ ] Add image upload functionality
+- [ ] Implement password reset via email
+- [ ] Add project categories/tags
+- [ ] Implement search and filter for projects
+- [ ] Add unit tests
+- [ ] Implement rate limiting
+
+## 📄 License
+
+MIT License
+
+## 👨‍💻 Author
+
+**João Oliveira**
+- GitHub: [@joaoliveira12345](https://github.com/joaoliveira12345)
+- LinkedIn: [João Oliveira](https://www.linkedin.com/in/joão-oliveira-303102309)
+
+---
+
+**Built with ❤️ for Full-Stack Integration Exercise**
+
+4. **Save the file** (Ctrl+S)
+
+---
+
+## **STEP 7: Create .gitignore File**
+
+### **File to Create:** `c:\Users\Joaol\OneDrive\Ambiente de Trabalho\Projetos\Portefolio\.gitignore`
+
+**Instructions:**
+1. Check if `.gitignore` already exists in root folder
+2. If it **exists**, open it and **append** this content
+3. If it **doesn't exist**, create new file named `.gitignore` and paste:
+
+````gitignore
+# Dependencies
+node_modules/
+portefolio-backend/node_modules/
+
+# Environment Variables
+.env
+.env.local
+.env.development
+.env.production
+portefolio-backend/.env
+
+# Build Output
+build/
+dist/
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Testing
+coverage/
+.nyc_output/
+
+# Misc
+.cache/
+.temp/
+````
